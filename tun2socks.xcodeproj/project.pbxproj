@@ -227,8 +227,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		3642CA011CEDCC60001E0AAF /* tun2socks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tun2socks.h; sourceTree = "<group>"; };
-		3642CA031CEDCC60001E0AAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3642CA0A1CEDCC71001E0AAF /* CHANGELOG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG; sourceTree = "<group>"; };
 		3642CA0B1CEDCC71001E0AAF /* COPYING */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
 		3642CA131CEDCC71001E0AAF /* FILES */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FILES; sourceTree = "<group>"; };
@@ -298,7 +296,6 @@
 		3642CB541CEEAF05001E0AAF /* cc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cc.h; sourceTree = "<group>"; };
 		3642CB5A1CEEB696001E0AAF /* sys_arch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sys_arch.h; sourceTree = "<group>"; };
 		3642CB5B1CEEB851001E0AAF /* perf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = perf.h; sourceTree = "<group>"; };
-		36A718F51D5B0A1B00DC35F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		36A718FF1D5B0AC100DC35F5 /* lwip.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = lwip.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		36A719031D5B0AC100DC35F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		36A719371D5B0F3100DC35F5 /* lwip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lwip.h; sourceTree = "<group>"; };
@@ -490,10 +487,8 @@
 				3642C9FF1CEDCC60001E0AAF /* Products */,
 				36A718F21D5B0A1B00DC35F5 /* lwip */,
 				36A719001D5B0AC100DC35F5 /* lwip-iOS */,
-				36A718F91D5B0AA400DC35F5 /* lwip-macOS */,
 				3642CA001CEDCC60001E0AAF /* tun2socks */,
 				36C48CA31CF8701A0071804F /* tun2socks-iOS */,
-				368225B41D114ADF00E7B495 /* tun2socks-macOS */,
 				36C48C9C1CF8667F0071804F /* README.md */,
 			);
 			sourceTree = "<group>";
@@ -696,15 +691,6 @@
 			path = src;
 			sourceTree = "<group>";
 		};
-		368225B41D114ADF00E7B495 /* tun2socks-macOS */ = {
-			isa = PBXGroup;
-			children = (
-				3642CA031CEDCC60001E0AAF /* Info.plist */,
-				3642CA011CEDCC60001E0AAF /* tun2socks.h */,
-			);
-			path = "tun2socks-macOS";
-			sourceTree = "<group>";
-		};
 		36A718F21D5B0A1B00DC35F5 /* lwip */ = {
 			isa = PBXGroup;
 			children = (
@@ -722,14 +708,6 @@
 				36A719371D5B0F3100DC35F5 /* lwip.h */,
 			);
 			path = lwip;
-			sourceTree = "<group>";
-		};
-		36A718F91D5B0AA400DC35F5 /* lwip-macOS */ = {
-			isa = PBXGroup;
-			children = (
-				36A718F51D5B0A1B00DC35F5 /* Info.plist */,
-			);
-			path = "lwip-macOS";
 			sourceTree = "<group>";
 		};
 		36A719001D5B0AC100DC35F5 /* lwip-iOS */ = {
