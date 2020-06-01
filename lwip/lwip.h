@@ -80,11 +80,65 @@ extern const ip_addr_t ip_addr_broadcast;
 /** 0.0.0.0 */
 #define IPADDR_ANY          ((u32_t)0x00000000UL)
 
+/* Base flags for pbuf_type definitions: */
+
+/** Indicates that the payload directly follows the struct pbuf.
+ *  This makes @ref pbuf_header work in both directions. */
+#define PBUF_TYPE_FLAG_STRUCT_DATA_CONTIGUOUS       0x80
+/** Indicates the data stored in this pbuf can change. If this pbuf needs
+ * to be queued, it must be copied/duplicated. */
+#define PBUF_TYPE_FLAG_DATA_VOLATILE                0x40
+/** 4 bits are reserved for 16 allocation sources (e.g. heap, pool1, pool2, etc)
+ * Internally, we use: 0=heap, 1=MEMP_PBUF, 2=MEMP_PBUF_POOL -> 13 types free*/
+#define PBUF_TYPE_ALLOC_SRC_MASK                    0x0F
+/** Indicates this pbuf is used for RX (if not set, indicates use for TX).
+ * This information can be used to keep some spare RX buffers e.g. for
+ * receiving TCP ACKs to unblock a connection) */
+#define PBUF_ALLOC_FLAG_RX                          0x0100
+/** Indicates the application needs the pbuf payload to be in one piece */
+#define PBUF_ALLOC_FLAG_DATA_CONTIGUOUS             0x0200
+
+#define PBUF_TYPE_ALLOC_SRC_MASK_STD_HEAP           0x00
+#define PBUF_TYPE_ALLOC_SRC_MASK_STD_MEMP_PBUF      0x01
+#define PBUF_TYPE_ALLOC_SRC_MASK_STD_MEMP_PBUF_POOL 0x02
+/** First pbuf allocation type for applications */
+#define PBUF_TYPE_ALLOC_SRC_MASK_APP_MIN            0x03
+/** Last pbuf allocation type for applications */
+#define PBUF_TYPE_ALLOC_SRC_MASK_APP_MAX            PBUF_TYPE_ALLOC_SRC_MASK
+
+
+/*
 typedef enum {
-    PBUF_RAM, /* pbuf data is stored in RAM */
-    PBUF_ROM, /* pbuf data is stored in ROM */
-    PBUF_REF, /* pbuf comes from the pbuf pool */
-    PBUF_POOL /* pbuf payload refers to RAM */
+    PBUF_RAM,
+    PBUF_ROM,
+    PBUF_REF,
+    PBUF_POOL
+} pbuf_type;
+*/
+
+typedef enum {
+  /** pbuf data is stored in RAM, used for TX mostly, struct pbuf and its payload
+      are allocated in one piece of contiguous memory (so the first payload byte
+      can be calculated from struct pbuf).
+      pbuf_alloc() allocates PBUF_RAM pbufs as unchained pbufs (although that might
+      change in future versions).
+      This should be used for all OUTGOING packets (TX).*/
+  PBUF_RAM = (PBUF_ALLOC_FLAG_DATA_CONTIGUOUS | PBUF_TYPE_FLAG_STRUCT_DATA_CONTIGUOUS | PBUF_TYPE_ALLOC_SRC_MASK_STD_HEAP),
+  /** pbuf data is stored in ROM, i.e. struct pbuf and its payload are located in
+      totally different memory areas. Since it points to ROM, payload does not
+      have to be copied when queued for transmission. */
+  PBUF_ROM = PBUF_TYPE_ALLOC_SRC_MASK_STD_MEMP_PBUF,
+  /** pbuf comes from the pbuf pool. Much like PBUF_ROM but payload might change
+      so it has to be duplicated when queued before transmitting, depending on
+      who has a 'ref' to it. */
+  PBUF_REF = (PBUF_TYPE_FLAG_DATA_VOLATILE | PBUF_TYPE_ALLOC_SRC_MASK_STD_MEMP_PBUF),
+  /** pbuf payload refers to RAM. This one comes from a pool and should be used
+      for RX. Payload can be chained (scatter-gather RX) but like PBUF_RAM, struct
+      pbuf and its payload are allocated in one piece of contiguous memory (so
+      the first payload byte can be calculated from struct pbuf).
+      Don't use this for TX, if the pool becomes empty e.g. because of TCP queuing,
+      you are unable to receive TCP acks! */
+  PBUF_POOL = (PBUF_ALLOC_FLAG_RX | PBUF_TYPE_FLAG_STRUCT_DATA_CONTIGUOUS | PBUF_TYPE_ALLOC_SRC_MASK_STD_MEMP_PBUF_POOL)
 } pbuf_type;
 
 struct pbuf {
@@ -120,11 +174,70 @@ struct pbuf {
     u16_t ref;
 };
 
+/*
 typedef enum {
     PBUF_TRANSPORT,
     PBUF_IP,
     PBUF_LINK,
     PBUF_RAW
+} pbuf_layer;
+ */
+
+#define PBUF_TRANSPORT_HLEN 20
+#if LWIP_IPV6
+#define PBUF_IP_HLEN        40
+#else
+#define PBUF_IP_HLEN        20
+#endif
+
+/**
+ * PBUF_LINK_ENCAPSULATION_HLEN: the number of bytes that should be allocated
+ * for an additional encapsulation header before ethernet headers (e.g. 802.11)
+ */
+#if !defined PBUF_LINK_ENCAPSULATION_HLEN || defined __DOXYGEN__
+#define PBUF_LINK_ENCAPSULATION_HLEN    0
+#endif
+
+#if !defined ETH_PAD_SIZE || defined __DOXYGEN__
+#define ETH_PAD_SIZE                    0
+#endif
+
+/**
+ * PBUF_LINK_HLEN: the number of bytes that should be allocated for a
+ * link level header. The default is 14, the standard value for
+ * Ethernet.
+ */
+ #if !defined PBUF_LINK_HLEN || defined __DOXYGEN__
+#if (defined LWIP_HOOK_VLAN_SET || LWIP_VLAN_PCP) && !defined __DOXYGEN__
+ #define PBUF_LINK_HLEN                  (18 + ETH_PAD_SIZE)
+#else /* LWIP_HOOK_VLAN_SET || LWIP_VLAN_PCP */
+ #define PBUF_LINK_HLEN                  (14 + ETH_PAD_SIZE)
+#endif /* LWIP_HOOK_VLAN_SET || LWIP_VLAN_PCP */
+ #endif
+
+typedef enum {
+  /** Includes spare room for transport layer header, e.g. UDP header.
+   * Use this if you intend to pass the pbuf to functions like udp_send().
+   */
+  PBUF_TRANSPORT = PBUF_LINK_ENCAPSULATION_HLEN + PBUF_LINK_HLEN + PBUF_IP_HLEN + PBUF_TRANSPORT_HLEN,
+  /** Includes spare room for IP header.
+   * Use this if you intend to pass the pbuf to functions like raw_send().
+   */
+  PBUF_IP = PBUF_LINK_ENCAPSULATION_HLEN + PBUF_LINK_HLEN + PBUF_IP_HLEN,
+  /** Includes spare room for link layer header (ethernet header).
+   * Use this if you intend to pass the pbuf to functions like ethernet_output().
+   * @see PBUF_LINK_HLEN
+   */
+  PBUF_LINK = PBUF_LINK_ENCAPSULATION_HLEN + PBUF_LINK_HLEN,
+  /** Includes spare room for additional encapsulation header before ethernet
+   * headers (e.g. 802.11).
+   * Use this if you intend to pass the pbuf to functions like netif->linkoutput().
+   * @see PBUF_LINK_ENCAPSULATION_HLEN
+   */
+  PBUF_RAW_TX = PBUF_LINK_ENCAPSULATION_HLEN,
+  /** Use this for input packets in a netif driver when calling netif->input()
+   * in the most common case - ethernet-layer netif driver. */
+  PBUF_RAW = 0
 } pbuf_layer;
 
 struct pbuf *pbuf_alloc(pbuf_layer l, u16_t length, pbuf_type type);

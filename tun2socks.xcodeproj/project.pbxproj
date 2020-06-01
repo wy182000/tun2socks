@@ -214,6 +214,9 @@
 		540F447D2483E3D7004CDF2B /* altcp_tls.h in Headers */ = {isa = PBXBuildFile; fileRef = 540F442A2483E3D5004CDF2B /* altcp_tls.h */; };
 		540F447E2483E3D7004CDF2B /* etharp.h in Headers */ = {isa = PBXBuildFile; fileRef = 540F442B2483E3D5004CDF2B /* etharp.h */; };
 		540F447F2483E3D7004CDF2B /* icmp6.h in Headers */ = {isa = PBXBuildFile; fileRef = 540F442C2483E3D5004CDF2B /* icmp6.h */; };
+		54E4AC25248559A400271F95 /* lwipopts.h in Headers */ = {isa = PBXBuildFile; fileRef = 3642CB4E1CEDCD6E001E0AAF /* lwipopts.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		54E4AC26248559F400271F95 /* opt.h in Headers */ = {isa = PBXBuildFile; fileRef = 3642CA691CEDCC71001E0AAF /* opt.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		54E4AC2724855A6600271F95 /* pbuf.h in Headers */ = {isa = PBXBuildFile; fileRef = 3642CA6A1CEDCC71001E0AAF /* pbuf.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -903,7 +906,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				54E4AC2724855A6600271F95 /* pbuf.h in Headers */,
 				540F43D32483E3C7004CDF2B /* pppos.h in Headers */,
+				54E4AC26248559F400271F95 /* opt.h in Headers */,
+				54E4AC25248559A400271F95 /* lwipopts.h in Headers */,
 				540F443E2483E3D5004CDF2B /* tcpbase.h in Headers */,
 				540F43CA2483E3C7004CDF2B /* vj.h in Headers */,
 				540F44332483E3D5004CDF2B /* nd6.h in Headers */,
@@ -938,8 +944,8 @@
 				540F43042483E182004CDF2B /* timeouts.h in Headers */,
 				540F44422483E3D6004CDF2B /* nd6.h in Headers */,
 				540F43C32483E3C7004CDF2B /* md5.h in Headers */,
-				540F44512483E3D6004CDF2B /* ieee.h in Headers */,
 				540F44342483E3D5004CDF2B /* tcpip_priv.h in Headers */,
+				540F44512483E3D6004CDF2B /* ieee.h in Headers */,
 				36A719391D5B0F3100DC35F5 /* lwip.h in Headers */,
 				36A7193F1D5B141B00DC35F5 /* sys_arch.h in Headers */,
 				540F442E2483E3D5004CDF2B /* dhcp6.h in Headers */,
@@ -1248,6 +1254,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -1308,6 +1315,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -1361,6 +1369,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
@@ -1390,6 +1399,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
@@ -1420,6 +1430,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
@@ -1440,6 +1451,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/lwip/";
 			};
 			name = Debug;
 		};
@@ -1447,6 +1459,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
@@ -1467,6 +1480,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/lwip/";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
